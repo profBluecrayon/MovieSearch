@@ -1,5 +1,7 @@
 # README
 
+**_ Please use the following app link (already setup for you): [www.moviesearch.railway.app](https://moviesearch-production-62dd.up.railway.app/) _**
+
 #### Details
 
 2000-2020 movie search app.
@@ -13,7 +15,7 @@ Built on create-react-app for simplicity.
 - simplify updates after async requests
 - cache searches results on client
 - add language support (i18n-js)
-- add css
+- add css (also media queries and handling mobile device screens)
 - convert project to typescript
 
 #### Later Todo-List (not really necessary since not enough services/complexity that need to be managed)
