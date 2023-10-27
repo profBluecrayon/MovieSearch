@@ -16,6 +16,7 @@
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.14.15",
     "@mui/material": "5.14.15",
+    "@sentry/react": "7.76.0",
     "axios": "1.5.1",
     "firebase": "10.5.0",
     "firebase-admin": "11.11.0",
@@ -24,10 +25,8 @@
     "react-dom": "18.2.0",
     "react-router-dom": "6.17.0",
     "react-scripts": "5.0.1",
-    "//": "serve needed if using railway",
     "serve": "14.2.1"
   },
-  
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "eslint": "8.52.0",
@@ -41,13 +40,10 @@
     "prettier-eslint": "16.1.1"
   },
   "lint-staged": {
-		"src/**/*": [
-			"yarn generate"
-		],
-		"src/**/*.{js,jsx,ts,tsx}": [
-			"yarn lint"
-		]
-	},
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "yarn lint"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
