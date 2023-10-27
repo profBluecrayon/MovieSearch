@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve build -s -n -L -p $PORT",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -22,20 +23,31 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.17.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "//": "serve needed if using railway",
+    "serve": "14.2.1"
   },
+  
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "eslint": "8.52.0",
-    "eslint-plugin-prettier": "5.0.1",
-		"eslint-plugin-react": "7.33.2",
     "eslint-plugin-import": "2.29.0",
-		"eslint-plugin-sort-imports-es6-autofix": "0.6.0",
-		"eslint-plugin-unused-imports": "3.0.0",
+    "eslint-plugin-prettier": "5.0.1",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-sort-imports-es6-autofix": "0.6.0",
+    "eslint-plugin-unused-imports": "3.0.0",
     "husky": "8.0.3",
-		"prettier": "3.0.3",
-		"prettier-eslint": "16.1.1"
+    "prettier": "3.0.3",
+    "prettier-eslint": "16.1.1"
   },
+  "lint-staged": {
+		"src/**/*": [
+			"yarn generate"
+		],
+		"src/**/*.{js,jsx,ts,tsx}": [
+			"yarn lint"
+		]
+	},
   "eslintConfig": {
     "extends": "react-app"
   },
