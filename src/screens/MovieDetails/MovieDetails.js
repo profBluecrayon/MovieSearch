@@ -1,13 +1,15 @@
-import { AppBar, Avatar, Card, CardActionArea, CardContent, CardMedia, CssBaseline, Icon, List, ListItem, ListItemText, Paper, Typography } from '@mui/material'
+import { Avatar, Button, CardActions, CardContent, CardMedia, CssBaseline, Icon, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { Image } from '@mui/icons-material'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 
+import { CustomAppBar, CustomCard } from 'components'
 import { getArtworkFromTheMovieDB, getCreditsFromTheMovieDB, getIMDBRatings, getIMDBTitleInfo, getTheMovieDBImageURL } from 'helpers'
+import useStyles from './MovieDetails.styles'
 
 const MovieDetails = () => {
+	const { classes } = useStyles()
 	const { id, tconst } = useParams() || {}
-	const navigate = useNavigate()
 
 	const [titleInfo, setTitleInfo] = useState({
 		// FROM IMDB TITLE INFO
@@ -56,27 +58,19 @@ const MovieDetails = () => {
 		})
 	}
 
-	const navigateBack = () => {
-		navigate(-1)
-	}
-
 	if (!id) {
 		return <div>Sorry, but the Movie was not found</div>
 	}
 
 	return (
 		<div>
-			<AppBar position="static">
-				<Typography variant="h5" color="inherit" noWrap>
-					Movies Search
-				</Typography>
-			</AppBar>
-			<main>
+			<CustomAppBar />
+			<main className={classes.container}>
 				<CssBaseline />
-				<Card>
-					<CardMedia component="img" image={creditInfo.poster} title={titleInfo.primaryTitle} />
-					<div>
-						<CardContent>
+				<CustomCard className={classes.imageContainer}>
+					<CardMedia className={classes.cover} component="img" image={creditInfo.poster} title={titleInfo.primaryTitle} />
+					<div className={classes.details}>
+						<CardContent className={classes.content}>
 							<Typography component="h4" variant="h4">
 								{titleInfo.primaryTitle} ({titleInfo.startYear})
 							</Typography>
@@ -86,29 +80,35 @@ const MovieDetails = () => {
 							<Typography variant="subtitle2" color="textSecondary">
 								Type: {titleInfo.titleType}
 							</Typography>
-							<Typography color="textSecondary">
+							<Typography className={classes.pos} color="textSecondary">
 								Ratings: {ratingsInfo.averageRating} ({ratingsInfo.numVotes})
 							</Typography>
-							<Typography color="textSecondary">Runtime : {titleInfo.runtimeMinutes} Minutes</Typography>
+							<Typography className={classes.pos} color="textSecondary">
+								Runtime : {titleInfo.runtimeMinutes} Minutes
+							</Typography>
 							<Typography component="p">{creditInfo.overview}</Typography>
 						</CardContent>
-						<CardActionArea onClick={navigateBack} title="Back" />
+						<CardActions>
+							<Link to="/">
+								<Button size="small">Back</Button>
+							</Link>
+						</CardActions>
 					</div>
-				</Card>
+				</CustomCard>
 			</main>
 
-			<main>
+			<main className={classes.container}>
 				<CssBaseline />
-				<Paper>
+				<CustomCard>
 					<Typography component="h5" variant="h5">
 						Cast Member(s)
 					</Typography>
-					<List>
+					<List className={classes.list}>
 						{creditInfo.cast.map((castMember) => {
 							const profilePic = castMember.profile_path ? getTheMovieDBImageURL(castMember.profile_path) : castMember.profilePic
 							return (
 								<ListItem key={castMember.name}>
-									<Avatar alt={castMember.name} src={profilePic}>
+									<Avatar alt={castMember.name} src={profilePic} className={classes.bigAvatar}>
 										<Icon component={Image} />
 									</Avatar>
 									<ListItemText primary={castMember.name} secondary={castMember.character} />
@@ -116,7 +116,7 @@ const MovieDetails = () => {
 							)
 						})}
 					</List>
-				</Paper>
+				</CustomCard>
 			</main>
 		</div>
 	)

@@ -1,48 +1,52 @@
-import { AppBar, Button, CssBaseline, FormControl, Input, InputLabel, List, Paper, Typography } from '@mui/material'
+import { Button, CssBaseline, FormControl, Input, InputLabel, List } from '@mui/material'
 import React, { useState } from 'react'
 
-import { CustomSnackbar, SearchResultItem } from 'components'
+import { CustomAppBar, CustomCard, CustomSnackbar } from 'components'
 import { searchForIMDBTitle } from 'helpers'
+import SearchResultItem from './SearchResultItem'
+import useStyles from './MovieSearch.styles'
 
 const MovieSearch = () => {
-	const [state, setState] = useState({
-		searchQuery: '',
+	const { classes } = useStyles()
+	const [search, setSearch] = useState({
+		query: '',
 		results: [],
 		successOpen: false,
 		failedOpen: false,
 	})
 
-	const handleSuccessClose = (_event, reason) => {
+	const handleSuccessClose = (_e, reason) => {
 		if (reason === 'clickaway') {
 			return
 		}
 
-		setState({ ...state, successOpen: false })
+		setSearch({ ...search, successOpen: false })
 	}
-	const handleFailedClose = (_event, reason) => {
+	const handleFailedClose = (_e, reason) => {
 		if (reason === 'clickaway') {
 			return
 		}
 
-		setState({ ...state, failedOpen: false })
+		setSearch({ ...search, failedOpen: false })
 	}
+
 	const handleChange = (e) => {
-		setState({
-			...state,
-			[e.target.name]: e.target.value,
+		setSearch({
+			...search,
+			query: e.target.value,
 		})
 	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 
-		if (!state.searchQuery) return
+		if (!search.query) return
 
-		searchForIMDBTitle(state.searchQuery, (searches) => {
-			const newState = []
+		searchForIMDBTitle(search.query, (searches) => {
+			const newResults = []
 
 			for (const searchItem in searches) {
-				newState.push({
+				newResults.push({
 					id: searchItem,
 					originalTitle: searches[searchItem].originalTitle,
 					primaryTitle: searches[searchItem].primaryTitle,
@@ -56,10 +60,10 @@ const MovieSearch = () => {
 				})
 			}
 
-			const isSuccess = newState.length > 0
-			setState({
-				results: newState,
-				searchQuery: '',
+			const isSuccess = newResults.length > 0
+			setSearch({
+				results: newResults,
+				query: '',
 				successOpen: isSuccess,
 				failedOpen: !isSuccess,
 			})
@@ -68,48 +72,48 @@ const MovieSearch = () => {
 
 	return (
 		<div>
-			<AppBar position="static">
-				<Typography variant="h5" color="inherit" noWrap>
-					Movies Search
-				</Typography>
-			</AppBar>
-			<main>
+			<CustomAppBar />
+			<main className={classes.searchMain}>
 				<CssBaseline />
-				<Paper>
-					<form onSubmit={handleSubmit}>
+				<CustomCard>
+					<form className={classes.form} onSubmit={handleSubmit}>
 						<FormControl margin="normal" required fullWidth>
 							<InputLabel htmlFor="searchQuery">Search Movies</InputLabel>
-							<Input id="searchQuery" name="searchQuery" autoComplete="searchQuery" onChange={handleChange} value={state.searchQuery} autoFocus />
+							<Input id="searchQuery" name="searchQuery" autoComplete="searchQuery" onChange={handleChange} value={search.query} autoFocus />
 						</FormControl>
-						<Button type="submit" fullWidth variant="contained" color="primary" onClick={handleSubmit}>
+						<Button className={classes.submitButton} type="submit" fullWidth variant="contained" color="primary" onClick={handleSubmit}>
 							Submit
 						</Button>
 					</form>
-				</Paper>
+				</CustomCard>
 			</main>
-			<main>
-				<CssBaseline />
-				<Paper>
-					<List>
-						{state.results.map((searchItem) => (
-							<SearchResultItem
-								key={searchItem.id}
-								id={searchItem.id}
-								primaryTitle={searchItem.primaryTitle}
-								originalTitle={searchItem.originalTitle}
-								runtimeMinutes={searchItem.runtimeMinutes}
-								tconst={searchItem.tconst}
-								genres={searchItem.genres}
-								titleType={searchItem.titleType}
-								endYear={searchItem.endYear}
-								startYear={searchItem.startYear}
-							/>
-						))}
-					</List>
-				</Paper>
-			</main>
-			<CustomSnackbar open={state.successOpen} message={`${state.results.length} Search Result(s) found successfully!`} onClose={handleSuccessClose} variant="success" />
-			<CustomSnackbar open={state.failedOpen} onClose={handleFailedClose} message="No Results found, try another movie!" variant="error" />
+			{!!search.results.length && (
+				<>
+					<main className={classes.listMain}>
+						<CssBaseline />
+						<CustomCard>
+							<List className={classes.list}>
+								{search.results.map((searchItem) => (
+									<SearchResultItem
+										key={searchItem.id}
+										id={searchItem.id}
+										primaryTitle={searchItem.primaryTitle}
+										originalTitle={searchItem.originalTitle}
+										runtimeMinutes={searchItem.runtimeMinutes}
+										tconst={searchItem.tconst}
+										genres={searchItem.genres}
+										titleType={searchItem.titleType}
+										endYear={searchItem.endYear}
+										startYear={searchItem.startYear}
+									/>
+								))}
+							</List>
+						</CustomCard>
+					</main>
+					<CustomSnackbar open={search.successOpen} message={`${search.results.length} Search Result(s) found successfully!`} onClose={handleSuccessClose} variant="success" />
+					<CustomSnackbar open={search.failedOpen} message="No Results found, try another movie!" onClose={handleFailedClose} variant="error" />
+				</>
+			)}
 		</div>
 	)
 }

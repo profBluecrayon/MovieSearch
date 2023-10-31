@@ -15,8 +15,8 @@ Built on create-react-app for simplicity.
 - simplify updates after async requests
 - find alternative to adding secrets in environment vars
 - cache searches results on client
-- add css (also media queries and handling mobile device screens)
 - convert project to typescript
+- ^ look into fetching necessary types from themovie's Swagger page
 - add analytics
 
 #### Later Todo-List (not really necessary since not enough services/complexity that need to be managed)
