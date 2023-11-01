@@ -2,7 +2,7 @@ import { Button, CssBaseline, FormControl, Input, InputLabel, List } from '@mui/
 import React, { useState } from 'react'
 
 import { CustomAppBar, CustomCard, CustomSnackbar } from 'components'
-import { searchForIMDBTitle } from 'helpers'
+import { searchForIMDBTitle } from 'utils'
 import SearchResultItem from './SearchResultItem'
 import useStyles from './MovieSearch.styles'
 
@@ -88,32 +88,30 @@ const MovieSearch = () => {
 				</CustomCard>
 			</main>
 			{!!search.results.length && (
-				<>
-					<main className={classes.listMain}>
-						<CssBaseline />
-						<CustomCard>
-							<List className={classes.list}>
-								{search.results.map((searchItem) => (
-									<SearchResultItem
-										key={searchItem.id}
-										id={searchItem.id}
-										primaryTitle={searchItem.primaryTitle}
-										originalTitle={searchItem.originalTitle}
-										runtimeMinutes={searchItem.runtimeMinutes}
-										tconst={searchItem.tconst}
-										genres={searchItem.genres}
-										titleType={searchItem.titleType}
-										endYear={searchItem.endYear}
-										startYear={searchItem.startYear}
-									/>
-								))}
-							</List>
-						</CustomCard>
-					</main>
-					<CustomSnackbar open={search.successOpen} message={`${search.results.length} Search Result(s) found successfully!`} onClose={handleSuccessClose} variant="success" />
-					<CustomSnackbar open={search.failedOpen} message="No Results found, try another movie!" onClose={handleFailedClose} variant="error" />
-				</>
+				<main className={classes.listMain}>
+					<CssBaseline />
+					<CustomCard>
+						<List className={classes.list}>
+							{search.results.map((searchItem) => (
+								<SearchResultItem
+									key={searchItem.id}
+									id={searchItem.id}
+									primaryTitle={searchItem.primaryTitle}
+									originalTitle={searchItem.originalTitle}
+									runtimeMinutes={searchItem.runtimeMinutes}
+									tconst={searchItem.tconst}
+									genres={searchItem.genres}
+									titleType={searchItem.titleType}
+									endYear={searchItem.endYear}
+									startYear={searchItem.startYear}
+								/>
+							))}
+						</List>
+					</CustomCard>
+				</main>
 			)}
+			<CustomSnackbar open={search.successOpen} message={`${search.results.length} Search Result(s) found successfully!`} onClose={handleSuccessClose} variant="success" />
+			<CustomSnackbar open={search.failedOpen} message="No Results found, try another movie!" onClose={handleFailedClose} variant="error" />
 		</div>
 	)
 }

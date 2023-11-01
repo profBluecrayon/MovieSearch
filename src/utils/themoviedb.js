@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { http } from 'utils'
 
 const themoviedbAPIKey = process.env.REACT_APP_themoviedb_apiKey
 
@@ -9,15 +9,13 @@ const themoviedbAPIKey = process.env.REACT_APP_themoviedb_apiKey
  *        see https://developers.themoviedb.org/3/find/find-by-id for details
  */
 export async function getArtworkFromTheMovieDB(tconst) {
-	const { data } = await axios
-		.get(`https://api.themoviedb.org/3/find/${tconst}`, {
-			params: {
-				api_key: themoviedbAPIKey,
-				language: 'en-US',
-				external_source: 'imdb_id',
-			},
-		})
-		.catch((error) => console.warn(error))
+	const { data } = await http().get(`/find/${tconst}`, {
+		params: {
+			api_key: themoviedbAPIKey,
+			language: 'en-US',
+			external_source: 'imdb_id',
+		},
+	})
 
 	return data.movie_results
 }
@@ -29,13 +27,11 @@ export async function getArtworkFromTheMovieDB(tconst) {
  *        see https://developers.themoviedb.org/3/movies/get-movie-credits
  */
 export async function getCreditsFromTheMovieDB(movieDBId) {
-	const { data } = await axios
-		.get(`https://api.themoviedb.org/3/movie/${movieDBId}/credits`, {
-			params: {
-				api_key: themoviedbAPIKey,
-			},
-		})
-		.catch((error) => console.warn('error credits:', error))
+	const { data } = await http().get(`/movie/${movieDBId}/credits`, {
+		params: {
+			api_key: themoviedbAPIKey,
+		},
+	})
 
 	return data
 }

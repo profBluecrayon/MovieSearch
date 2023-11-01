@@ -17,11 +17,10 @@ Built on create-react-app for simplicity.
 - cache searches results on client
 - convert project to typescript
 - ^ look into fetching necessary types from themovie's Swagger page
-- add analytics
 
 #### Later Todo-List (not really necessary since not enough services/complexity that need to be managed)
 
 - add language support (i18n-js)
 - add redux
-- add axios interceptors
 - add feature flags
+- add seperate environment to differentiate between dev/prod

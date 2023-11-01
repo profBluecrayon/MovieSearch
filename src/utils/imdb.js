@@ -1,6 +1,6 @@
 import { child, endAt, get, limitToLast, orderByChild, query, ref, startAt } from 'firebase/database'
 
-import { firebase } from 'helpers'
+import { database } from '../firebase'
 
 /**
  * Searches for IMDB entries with a given title.
@@ -14,7 +14,7 @@ import { firebase } from 'helpers'
  *                 If there are no results, the callback is invoked with an empty object.
  */
 export const searchForIMDBTitle = (searchQuery, callback) => {
-	const searchItemsRef = ref(firebase, 'title_basics')
+	const searchItemsRef = ref(database, 'title_basics')
 	const searchItemQuery = query(searchItemsRef, limitToLast(10), orderByChild('originalTitle'), startAt(searchQuery), endAt(searchQuery + '\uf8ff'))
 
 	get(searchItemQuery)
@@ -38,7 +38,7 @@ export const searchForIMDBTitle = (searchQuery, callback) => {
  *                 originalTitle, primaryTitle, runtimeMinutes, tconst, titleType, endYear, startYear
  */
 export const getIMDBTitleInfo = (id, callback) => {
-	const searchItemsRef = ref(firebase)
+	const searchItemsRef = ref(database)
 	get(child(searchItemsRef, `title_basics/${id}`))
 		.then((snapshot) => {
 			callback(snapshot.val())
@@ -56,7 +56,7 @@ export const getIMDBTitleInfo = (id, callback) => {
  *                  will be called with an object with two fields: averageRating and numVotes
  */
 export const getIMDBRatings = (tconst, callback) => {
-	const searchItemsRef = ref(firebase)
+	const searchItemsRef = ref(database)
 	get(child(searchItemsRef, `title_ratings/${tconst}`))
 		.then((snapshot) => {
 			callback(snapshot.val())

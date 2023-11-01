@@ -1,4 +1,4 @@
-export const theme = {
+export default {
 	breakpoints: {
 		values: {
 			xs: 450,

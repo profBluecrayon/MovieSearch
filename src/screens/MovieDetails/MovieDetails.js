@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 
 import { CustomAppBar, CustomCard } from 'components'
-import { getArtworkFromTheMovieDB, getCreditsFromTheMovieDB, getIMDBRatings, getIMDBTitleInfo, getTheMovieDBImageURL } from 'helpers'
+import { getArtworkFromTheMovieDB, getCreditsFromTheMovieDB, getIMDBRatings, getIMDBTitleInfo, getTheMovieDBImageURL } from 'utils'
 import useStyles from './MovieDetails.styles'
 
 const MovieDetails = () => {
@@ -36,27 +36,27 @@ const MovieDetails = () => {
 	})
 
 	useEffect(() => {
+		const getMovieData = async () => {
+			getIMDBTitleInfo(id, setTitleInfo)
+			getIMDBRatings(tconst, setRatingsInfo)
+
+			const artworks = await getArtworkFromTheMovieDB(tconst)
+
+			if (!artworks?.[0]) return
+
+			const artwork = artworks[0]
+			const { cast = [], crew = [] } = (await getCreditsFromTheMovieDB(artwork.id)) || {}
+
+			setCreditInfo({
+				...artwork,
+				poster: getTheMovieDBImageURL(artwork.poster_path),
+				cast,
+				crew,
+			})
+		}
+
 		getMovieData()
 	}, [])
-
-	const getMovieData = async () => {
-		getIMDBTitleInfo(id, setTitleInfo)
-		getIMDBRatings(tconst, setRatingsInfo)
-
-		const artworks = await getArtworkFromTheMovieDB(tconst)
-
-		if (!artworks?.[0]) return
-
-		const artwork = artworks[0]
-		const { cast = [], crew = [] } = (await getCreditsFromTheMovieDB(artwork.id)) || {}
-
-		setCreditInfo({
-			...artwork,
-			poster: getTheMovieDBImageURL(artwork.poster_path),
-			cast,
-			crew,
-		})
-	}
 
 	if (!id) {
 		return <div>Sorry, but the Movie was not found</div>
