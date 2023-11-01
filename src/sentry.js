@@ -16,4 +16,4 @@ if (process.env.NODE_ENV === 'production') {
 	})
 }
 
-export { Sentry }
+export default Sentry

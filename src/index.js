@@ -5,12 +5,13 @@ import React from 'react'
 
 import './index.css'
 import { MovieDetails, MovieSearch } from 'screens'
-import { Sentry, theme } from 'helpers'
+import Sentry from './sentry'
+import ThemeConfig from './theme'
 
 const container = document.getElementById('root')
 const root = createRoot(container)
 
-const defaultTheme = createTheme(theme)
+const defaultTheme = createTheme(ThemeConfig)
 
 const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes)
 

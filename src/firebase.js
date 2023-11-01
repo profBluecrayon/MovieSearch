@@ -1,3 +1,4 @@
+import { getAnalytics } from 'firebase/analytics'
 import { getDatabase } from 'firebase/database'
 import { initializeApp } from 'firebase/app'
 
@@ -9,6 +10,7 @@ const {
 	REACT_APP_firebase_messagingSenderId: messagingSenderId,
 	REACT_APP_firebase_projectId: projectId,
 	REACT_APP_firebase_storageBucket: storageBucket,
+	REACT_APP_firebase_measurementId: measurementId,
 } = process.env
 
 const firebaseConfig = {
@@ -19,8 +21,10 @@ const firebaseConfig = {
 	messagingSenderId,
 	projectId,
 	storageBucket,
+	measurementId,
 }
 
 const app = initializeApp(firebaseConfig)
 
-export const firebase = getDatabase(app)
+export const database = getDatabase(app)
+export const analytics = getAnalytics(app)
