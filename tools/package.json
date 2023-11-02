@@ -1,0 +1,15 @@
+{
+  "name": "tools",
+  "version": "0.1.0",
+  "description": "",
+  "main": "generateTypes.js",
+  "scripts": {
+    "generate": "node ./generateTypes.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apidevtools/swagger-parser": "10.1.0",
+    "swagger-typescript-api": "13.0.3"
+  }
+}

@@ -1,64 +1,54 @@
 import { Avatar, Button, CardActions, CardContent, CardMedia, CssBaseline, Icon, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { Image } from '@mui/icons-material'
-import { Link, useParams } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
+import { Cast, CreditInfo, MovieItem, MovieRating } from 'helpers/types'
 import { CustomAppBar, CustomCard } from 'components'
-import { getArtworkFromTheMovieDB, getCreditsFromTheMovieDB, getIMDBRatings, getIMDBTitleInfo, getTheMovieDBImageURL } from 'utils'
+import { getArtworkFromTheMovieDB, getCreditsFromTheMovieDB, getIMDBRatings, getTheMovieDBImageURL } from 'utils'
 import useStyles from './MovieDetails.styles'
 
 const MovieDetails = () => {
 	const { classes } = useStyles()
-	const { id, tconst } = useParams() || {}
+	const { state } = useLocation() || {}
+	const movieInfo: MovieItem = state
 
-	const [titleInfo, setTitleInfo] = useState({
-		// FROM IMDB TITLE INFO
-		originalTitle: '',
-		primaryTitle: '',
-		runtimeMinutes: '',
-		genres: '',
-		titleType: '',
-		endYear: '',
-		startYear: '',
-	})
-	const [creditInfo, setCreditInfo] = useState({
+	const [creditInfo, setCreditInfo] = useState<CreditInfo>({
 		// FROM THEMOVIEDB DATA
 		overview: '',
 		poster: 'https://via.placeholder.com/200x300',
-		artWorkId: '',
-		cast: [],
-		crew: [],
+		cast: Array<Cast>(),
 	})
-	const [ratingsInfo, setRatingsInfo] = useState({
+	const [ratingsInfo, setRatingsInfo] = useState<MovieRating>({
 		// FROM IMDB RATINGS INFO
 		averageRating: '',
 		numVotes: '',
+		tconst: '',
 	})
 
 	useEffect(() => {
 		const getMovieData = async () => {
-			getIMDBTitleInfo(id, setTitleInfo)
-			getIMDBRatings(tconst, setRatingsInfo)
+			getIMDBRatings(movieInfo.tconst, setRatingsInfo)
 
-			const artworks = await getArtworkFromTheMovieDB(tconst)
+			const artworks = await getArtworkFromTheMovieDB(movieInfo.tconst)
 
 			if (!artworks?.[0]) return
 
 			const artwork = artworks[0]
-			const { cast = [], crew = [] } = (await getCreditsFromTheMovieDB(artwork.id)) || {}
+			const credits = (await getCreditsFromTheMovieDB(artwork.id)) || {}
+			const cast: Cast[] = credits.cast || []
 
 			setCreditInfo({
 				...artwork,
 				poster: getTheMovieDBImageURL(artwork.poster_path),
 				cast,
-				crew,
 			})
 		}
 
 		getMovieData()
 	}, [])
 
-	if (!id) {
+	if (!movieInfo.id) {
 		return <div>Sorry, but the Movie was not found</div>
 	}
 
@@ -68,24 +58,22 @@ const MovieDetails = () => {
 			<main className={classes.container}>
 				<CssBaseline />
 				<CustomCard className={classes.imageContainer}>
-					<CardMedia className={classes.cover} component="img" image={creditInfo.poster} title={titleInfo.primaryTitle} />
+					<CardMedia className={classes.cover} component="img" image={creditInfo.poster} title={movieInfo.primaryTitle} />
 					<div className={classes.details}>
 						<CardContent className={classes.content}>
 							<Typography component="h4" variant="h4">
-								{titleInfo.primaryTitle} ({titleInfo.startYear})
+								{movieInfo.primaryTitle} ({movieInfo.startYear})
 							</Typography>
 							<Typography variant="subtitle1" color="textSecondary">
-								Genre(s): {titleInfo.genres}
+								Genre(s): {movieInfo.genres}
 							</Typography>
 							<Typography variant="subtitle2" color="textSecondary">
-								Type: {titleInfo.titleType}
+								Type: {movieInfo.titleType}
 							</Typography>
-							<Typography className={classes.pos} color="textSecondary">
+							<Typography color="textSecondary">
 								Ratings: {ratingsInfo.averageRating} ({ratingsInfo.numVotes})
 							</Typography>
-							<Typography className={classes.pos} color="textSecondary">
-								Runtime : {titleInfo.runtimeMinutes} Minutes
-							</Typography>
+							<Typography color="textSecondary">Runtime : {movieInfo.runtimeMinutes} Minutes</Typography>
 							<Typography component="p">{creditInfo.overview}</Typography>
 						</CardContent>
 						<CardActions>
@@ -107,7 +95,7 @@ const MovieDetails = () => {
 						{creditInfo.cast.map((castMember) => {
 							const profilePic = castMember.profile_path ? getTheMovieDBImageURL(castMember.profile_path) : castMember.profilePic
 							return (
-								<ListItem key={castMember.name}>
+								<ListItem key={castMember.id}>
 									<Avatar alt={castMember.name} src={profilePic} className={classes.bigAvatar}>
 										<Icon component={Image} />
 									</Avatar>

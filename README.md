@@ -15,8 +15,8 @@ Built on create-react-app for simplicity.
 - simplify updates after async requests
 - find alternative to adding secrets in environment vars
 - cache searches results on client
-- convert project to typescript
-- ^ look into fetching necessary types from themovie's Swagger page
+- update themovieAPI to v4 and fetch corresponding types, should be generated from [swagger page](https://thetvdb.github.io/v4-api/#/Artwork/getArtworkBase)
+- create hook to infer useLocation() state types based on current page
 
 #### Later Todo-List (not really necessary since not enough services/complexity that need to be managed)
 

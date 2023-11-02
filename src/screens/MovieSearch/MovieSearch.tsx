@@ -1,49 +1,50 @@
 import { Button, CssBaseline, FormControl, Input, InputLabel, List } from '@mui/material'
-import React, { useState } from 'react'
+import { ChangeEvent, MouseEvent, useState } from 'react'
 
 import { CustomAppBar, CustomCard, CustomSnackbar } from 'components'
 import { searchForIMDBTitle } from 'utils'
+
+import { MovieItem } from 'helpers/types'
 import SearchResultItem from './SearchResultItem'
 import useStyles from './MovieSearch.styles'
 
+interface SearchProps {
+	query: string
+	results: MovieItem[]
+	successOpen: boolean
+	failedOpen: boolean
+}
+
 const MovieSearch = () => {
 	const { classes } = useStyles()
-	const [search, setSearch] = useState({
+	const [search, setSearch] = useState<SearchProps>({
 		query: '',
-		results: [],
+		results: Array<MovieItem>(),
 		successOpen: false,
 		failedOpen: false,
 	})
 
-	const handleSuccessClose = (_e, reason) => {
-		if (reason === 'clickaway') {
-			return
-		}
-
+	const handleSuccessClose = () => {
 		setSearch({ ...search, successOpen: false })
 	}
-	const handleFailedClose = (_e, reason) => {
-		if (reason === 'clickaway') {
-			return
-		}
-
+	const handleFailedClose = () => {
 		setSearch({ ...search, failedOpen: false })
 	}
 
-	const handleChange = (e) => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setSearch({
 			...search,
 			query: e.target.value,
 		})
 	}
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault()
 
 		if (!search.query) return
 
 		searchForIMDBTitle(search.query, (searches) => {
-			const newResults = []
+			const newResults: MovieItem[] = []
 
 			for (const searchItem in searches) {
 				newResults.push({
@@ -76,7 +77,8 @@ const MovieSearch = () => {
 			<main className={classes.searchMain}>
 				<CssBaseline />
 				<CustomCard>
-					<form className={classes.form} onSubmit={handleSubmit}>
+					{/* REMOVED ONCLICK FROM FORM */}
+					<form className={classes.form}>
 						<FormControl margin="normal" required fullWidth>
 							<InputLabel htmlFor="searchQuery">Search Movies</InputLabel>
 							<Input id="searchQuery" name="searchQuery" autoComplete="searchQuery" onChange={handleChange} value={search.query} autoFocus />
@@ -99,6 +101,7 @@ const MovieSearch = () => {
 									primaryTitle={searchItem.primaryTitle}
 									originalTitle={searchItem.originalTitle}
 									runtimeMinutes={searchItem.runtimeMinutes}
+									isAdult={searchItem.isAdult}
 									tconst={searchItem.tconst}
 									genres={searchItem.genres}
 									titleType={searchItem.titleType}

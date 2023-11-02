@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ListItemButton, ListItemText } from '@mui/material'
-import React from 'react'
 
-const SearchResultItem = ({ id, tconst, primaryTitle, startYear, genres }) => {
+import { MovieItem } from 'helpers/types'
+
+const SearchResultItem = (item: MovieItem) => {
+	const { id, tconst, primaryTitle, startYear, genres } = item
+
 	return (
-		<Link to={`/movie/${id}/${tconst}`} className="list-group-item" key={id}>
+		<Link to={`/movie/${id}/${tconst}`} state={item} className="list-group-item" key={id}>
 			<ListItemButton>
 				<ListItemText primary={`${primaryTitle} (${startYear})`} secondary={genres} />
 			</ListItemButton>
