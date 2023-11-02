@@ -1,5 +1,6 @@
-import { child, endAt, get, limitToLast, orderByChild, query, ref, startAt } from 'firebase/database'
+import { DataSnapshot, child, endAt, get, limitToLast, orderByChild, query, ref, startAt } from 'firebase/database'
 
+import { MovieInfo, MovieRating } from 'helpers/types'
 import { database } from '../firebase'
 
 /**
@@ -13,17 +14,14 @@ import { database } from '../firebase'
  *
  *                 If there are no results, the callback is invoked with an empty object.
  */
-export const searchForIMDBTitle = (searchQuery, callback) => {
+export const searchForIMDBTitle = (searchQuery: string, callback: (val: MovieInfo[]) => void) => {
 	const searchItemsRef = ref(database, 'title_basics')
 	const searchItemQuery = query(searchItemsRef, limitToLast(10), orderByChild('originalTitle'), startAt(searchQuery), endAt(searchQuery + '\uf8ff'))
 
 	get(searchItemQuery)
-		.then(
-			('value',
-			(snapshot) => {
-				callback(snapshot.val())
-			}),
-		)
+		.then((snapshot: DataSnapshot) => {
+			callback(snapshot.val())
+		})
 		.catch((err) => console.log(err))
 }
 
@@ -37,7 +35,7 @@ export const searchForIMDBTitle = (searchQuery, callback) => {
  *                 will be called with an object with the following fields:
  *                 originalTitle, primaryTitle, runtimeMinutes, tconst, titleType, endYear, startYear
  */
-export const getIMDBTitleInfo = (id, callback) => {
+export const getIMDBTitleInfo = (id: string, callback: (val: MovieInfo) => void) => {
 	const searchItemsRef = ref(database)
 	get(child(searchItemsRef, `title_basics/${id}`))
 		.then((snapshot) => {
@@ -55,7 +53,7 @@ export const getIMDBTitleInfo = (id, callback) => {
  * @param callback function to invoke with the rating information once retrieved.  The function
  *                  will be called with an object with two fields: averageRating and numVotes
  */
-export const getIMDBRatings = (tconst, callback) => {
+export const getIMDBRatings = (tconst: string, callback: (val: MovieRating) => void) => {
 	const searchItemsRef = ref(database)
 	get(child(searchItemsRef, `title_ratings/${tconst}`))
 		.then((snapshot) => {

@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "serve build -s -n -L -p $PORT",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "react-scripts start",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src --ext .js --cache --fix",
-    "prepare": "husky install"
+    "generate": "cd tools && npm run generate",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --cache --fix",
+    "prepare": "husky install",
+    "start": "serve build -s -n -L -p $PORT",
+    "tsc:compile": "tsc --project tsconfig.json",
+    "test": "react-scripts test"
+  },
+  "resolutions": {
+    "@types/react": "18"
   },
   "dependencies": {
     "@emotion/react": "11.11.1",
@@ -17,6 +22,10 @@
     "@mui/icons-material": "5.14.16",
     "@mui/material": "5.14.15",
     "@sentry/react": "7.76.0",
+    "@types/jest": "29.5.7",
+    "@types/node": "20.8.10",
+    "@types/react": "18.2.34",
+    "@types/react-dom": "18.2.14",
     "axios": "1.5.1",
     "firebase": "10.5.2",
     "firebase-admin": "11.11.0",
@@ -30,7 +39,10 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@typescript-eslint/eslint-plugin": "6.9.1",
+    "@typescript-eslint/parser": "6.9.1",
     "eslint": "8.52.0",
+    "eslint-import-resolver-typescript": "3.6.1",
     "eslint-plugin-import": "2.29.0",
     "eslint-plugin-prettier": "5.0.1",
     "eslint-plugin-react": "7.33.2",
@@ -38,7 +50,8 @@
     "eslint-plugin-unused-imports": "3.0.0",
     "husky": "8.0.3",
     "prettier": "3.0.3",
-    "prettier-eslint": "16.1.2"
+    "prettier-eslint": "16.1.2",
+    "typescript": "^5.2.2"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [

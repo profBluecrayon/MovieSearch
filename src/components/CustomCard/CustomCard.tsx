@@ -1,10 +1,14 @@
+import { FC, PropsWithChildren } from 'react'
 import { Paper } from '@mui/material'
-import React from 'react'
 
 import useStyles from './CustomCard.styles'
 
+interface CustomCardProps extends PropsWithChildren {
+	className?: string
+}
+
 // TODO: REMOVE THIS AND OVERWRITE MUI PADDING FOR PAPER
-const CustomCard = ({ children, className }) => {
+const CustomCard: FC<CustomCardProps> = ({ children, className }) => {
 	const { classes } = useStyles()
 
 	return (

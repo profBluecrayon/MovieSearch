@@ -1,16 +1,17 @@
 import { decode } from 'html-entities'
 import { logEvent } from 'firebase/analytics'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 
+import { NestedObject } from 'helpers/types'
 import { analytics } from '../firebase'
 import { flattenObject } from 'utils'
 
-const RequestType = {
-	Request: 'Request',
-	Response: 'Response',
+enum RequestType {
+	Request = 'Request',
+	Response = 'Response',
 }
 
-const logAnalytics = (data = {}, exchange = {}, suffixText = '') => {
+const logAnalytics = (data: NestedObject = {}, exchange: AxiosRequestConfig = {}, suffixText = '') => {
 	// Can't use nested objects, have to flatten or stringify all data, otherwise analytics will ignore
 	const flattenedData = flattenObject(data)
 
@@ -49,7 +50,7 @@ const createClient = () => {
 		async (request) => {
 			logAnalytics(request?.data, request)
 
-			const requestObj = {
+			const requestObj: Record<string, string | number | undefined> = {
 				type: RequestType.Request,
 				method: request.method?.toUpperCase(),
 				url: `${request.baseURL}${request.url || ''}`,
@@ -91,7 +92,7 @@ const createClient = () => {
 		async (error) => {
 			console.log({ error })
 
-			const responseObj = {
+			const responseObj: Record<string, string | number | undefined> = {
 				type: RequestType.Response,
 				method: error?.response?.config.method?.toUpperCase(),
 				status: error?.response?.status,

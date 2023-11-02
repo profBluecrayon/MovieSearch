@@ -1,5 +1,4 @@
 import { AppBar, Typography } from '@mui/material'
-import React from 'react'
 
 import useStyles from './CustomAppBar.styles'
 

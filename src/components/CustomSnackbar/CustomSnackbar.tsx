@@ -1,10 +1,17 @@
 import { Close } from '@mui/icons-material'
+import { FC } from 'react'
 import { Icon, IconButton, Snackbar } from '@mui/material'
-import React from 'react'
 
 import useStyles from './CustomSnackbar.styles'
 
-const CustomSnackbar = ({ message, variant, onClose, ...other }) => {
+interface CustomSnackbarProps {
+	open: boolean
+	message: string
+	variant: 'info' | 'success' | 'error' | 'warning'
+	onClose: () => void
+}
+
+const CustomSnackbar: FC<CustomSnackbarProps> = ({ message, variant, onClose, ...other }) => {
 	const { classes } = useStyles()
 
 	return (
