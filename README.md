@@ -1,7 +1,5 @@
 # README
 
-**_ Please use the following app link (already setup for you): [www.moviesearch.railway.app](https://moviesearch-production-62dd.up.railway.app/) _**
-
 #### Details
 
 2000-2020 movie search app.
